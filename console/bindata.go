@@ -8,10 +8,7 @@
 package console
 
 import (
-	"bytes"
-	"compress/gzip"
 	"fmt"
-	"io"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -19,24 +16,11 @@ import (
 	"time"
 )
 
+// кэш для шаблонов
+var templateCache = map[string][]byte{}
+
 func bindataRead(data []byte, name string) ([]byte, error) {
-	gz, err := gzip.NewReader(bytes.NewBuffer(data))
-	if err != nil {
-		return nil, fmt.Errorf("Read %q: %v", name, err)
-	}
-
-	var buf bytes.Buffer
-	_, err = io.Copy(&buf, gz)
-	clErr := gz.Close()
-
-	if err != nil {
-		return nil, fmt.Errorf("Read %q: %v", name, err)
-	}
-	if clErr != nil {
-		return nil, err
-	}
-
-	return buf.Bytes(), nil
+	return data, nil
 }
 
 type asset struct {
@@ -135,14 +119,20 @@ func tmplJsScriptJs() (*asset, error) {
 // could not be loaded.
 func Asset(name string) ([]byte, error) {
 	cannonicalName := strings.Replace(name, "\\", "/", -1)
-	if f, ok := _bindata[cannonicalName]; ok {
-		a, err := f()
-		if err != nil {
-			return nil, fmt.Errorf("Asset %s can't read by error: %v", name, err)
-		}
-		return a.bytes, nil
+
+	if _, ok := templateCache[cannonicalName]; ok {
+		return templateCache[cannonicalName], nil
 	}
-	return nil, fmt.Errorf("Asset %s not found", name)
+
+	data, err := ioutil.ReadFile(cannonicalName)
+
+	if err != nil {
+		return nil, err
+	}
+
+	templateCache[cannonicalName] = data
+
+	return data, nil
 }
 
 // MustAsset is like Asset but panics when Asset would return an error.
@@ -183,8 +173,8 @@ func AssetNames() []string {
 // _bindata is a table, holding each asset generator, mapped to its name.
 var _bindata = map[string]func() (*asset, error){
 	"tmpl/css/style.css": tmplCssStyleCss,
-	"tmpl/index.html": tmplIndexHtml,
-	"tmpl/js/script.js": tmplJsScriptJs,
+	"tmpl/index.html":    tmplIndexHtml,
+	"tmpl/js/script.js":  tmplJsScriptJs,
 }
 
 // AssetDir returns the file names below a certain
@@ -226,6 +216,7 @@ type bintree struct {
 	Func     func() (*asset, error)
 	Children map[string]*bintree
 }
+
 var _bintree = &bintree{nil, map[string]*bintree{
 	"tmpl": &bintree{nil, map[string]*bintree{
 		"css": &bintree{nil, map[string]*bintree{
@@ -284,4 +275,3 @@ func _filePath(dir, name string) string {
 	cannonicalName := strings.Replace(name, "\\", "/", -1)
 	return filepath.Join(append([]string{dir}, strings.Split(cannonicalName, "/")...)...)
 }
-

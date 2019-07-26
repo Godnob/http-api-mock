@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 	<title>HTTP API Mock Console</title>
 
 	<script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
@@ -20,121 +20,110 @@
 
 	<link rel="stylesheet" type="text/css" href="css/style.css">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-		<script type="text/JavaScript">
-	$( document ).ready(function() {
-		  var ws = new WebSocket("ws://" + location.host + "/echo");
-		  ws.onmessage = function(e) {
-		  	  var message = JSON.parse(event.data);
-		  	  logRequest(message);		      
-		  };
+	<script type="text/JavaScript">
+		$(document).ready(function () {
+			let wsScheme = location.protocol === 'https:' ? 'wss://' : 'ws://';
 
-			var ws = new WebSocket("ws://" + location.host + "/log");
-		  ws.onmessage = function(e) {
-					var message = JSON.parse(event.data);
-		  	  writeLog(message);		      
-		  };
-	});
-		</script>
+			let ws = new WebSocket(wsScheme + location.host + "/echo");
+			ws.onmessage = function () {
+				let message = JSON.parse(event.data);
+				logRequest(message);
+			};
+
+			let wsLog = new WebSocket(wsScheme + location.host + "/log");
+			wsLog.onmessage = function () {
+				let message = JSON.parse(event.data);
+				writeLog(message);
+			};
+		});
+	</script>
 </head>
 
 
 <body>
-	<!-- Stack the columns on mobile by making one full-width and the other half-width -->
-	<div class="container-fluid content" style="padding: 15px;">
-		<div class="row">
-			<div class="col-md-12 col-lg-12 console">
-				<div class="panel panel-primary" >
-					<div class="panel-heading">
-						<h3 class="panel-title">HTTP API Mock Console</h3>
-					</div>
-					<div class="panel-body" id="divGroupConsole" style="overflow:auto">
-						
-							<ul class="list-group" id="groupConsole">
-								
-							</ul>
-						
-					</div>
-					<div class="panel-footer">
-						<label style="padding-top: 1%;">
-							<input type="checkbox" id="chkAutoScroll" checked="true" > Auto scroll
-						</label>
-						<button type="button" class="btn btn-primary" tabindex="0" id="btnClearConsole" style="float:right;">
-						<span class="glyphicon glyphicon-remove-sign"></span> Clear Console</button>
-					</div>
+<!-- Stack the columns on mobile by making one full-width and the other half-width -->
+<div class="container-fluid content" style="padding: 15px;">
+	<div class="row">
+		<div class="col-md-12 col-lg-12 console">
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<h3 class="panel-title">HTTP API Mock Console</h3>
 				</div>
-			</div>	
-		</div>
-		<div class="row">
-			<div class="alert alert-info" style="display:none" id="alertMessenge">Welcome.</div>
-		</div>
-		<div class="row" >
-			<div class="col-md-12 col-lg-12 status">
-				<div class="panel panel-primary">
-					<div class="panel-heading">
-						<h3 class="panel-title">HTTP Details</h3>
-					</div>
-					<div class="panel-body">
-
-						<div id="tirecap" style="display:none" class="alert alert-success" >
-						  <strong><span id="tistatus"> </span></strong> <span id="tirequest"> </span>
-						</div>
-						
-						<ul class="nav nav-tabs">
-						  <li class="active" ><a href="#tabrequest" data-toggle="tab">Request</a></li>
-						  <li><a href="#tabresponse" data-toggle="tab">Response</a></li>
-							<li><a href="#tabpersist" data-toggle="tab">Persist</a></li>
-						  <li><a href="#tablog" data-toggle="tab">Log</a></li>
-						</ul>
-
-
-						<div class="tab-content">
-						  <div id="tabrequest" class="tab-pane fade in active">
-						    <pre id="hdrequest"></pre>
-						  </div>
-						  <div id="tabresponse" class="tab-pane fade">
-						    <pre id="hdresponse"></pre>
-						  </div>
-							<div id="tabpersist" class="tab-pane fade">
-						    <pre id="hdpersist"></pre>
-						  </div >
-						  <div id="tablog" class="tab-pane fade">
-						    <pre id="hdlog"></pre>
-						  </div >
-						</div>
-						
-					</div>
-
+				<div class="panel-body" id="divGroupConsole" style="overflow:auto">
+					<ul class="list-group" id="groupConsole"></ul>
+				</div>
+				<div class="panel-footer">
+					<label style="padding-top: 1%;">
+						<input type="checkbox" id="chkAutoScroll" checked="true"> Auto scroll
+					</label>
+					<button type="button" class="btn btn-primary" tabindex="0" id="btnClearConsole" style="float:right;">
+						<span class="glyphicon glyphicon-remove-sign"></span> Clear Console
+					</button>
 				</div>
 			</div>
-
 		</div>
+	</div>
+	<div class="row">
+		<div class="alert alert-info" style="display:none" id="alertMessenge">Welcome.</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12 col-lg-12 status">
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<h3 class="panel-title">HTTP Details</h3>
+				</div>
+				<div class="panel-body">
+					<div id="tirecap" style="display:none" class="alert alert-success">
+						<strong><span id="tistatus"> </span></strong> <span id="tirequest"> </span>
+					</div>
 
-		<div class="row">
-			<div class="col-md-12 col-lg-12 console">
-				<div class="panel panel-primary" >
-					<div class="panel-heading">
-						<h3 class="panel-title">Execution Logs</h3>
-					</div>
-					<div class="panel-body" id="divGroupLog" style="overflow:auto">
-						
-							<ul class="list-group" id="groupLog">
-								
-							</ul>
-						
-					</div>
-					<div class="panel-footer">
-						<label style="padding-top: 1%;">
-							<input type="checkbox" id="chkLogAutoScroll" checked="true" > Auto scroll
-						</label>
-						<button type="button" class="btn btn-primary" tabindex="0" id="btnClearLog" style="float:right;">
-						<span class="glyphicon glyphicon-remove-sign"></span> Clear Log</button>
+					<ul class="nav nav-tabs">
+						<li class="active"><a href="#tabrequest" data-toggle="tab">Request</a></li>
+						<li><a href="#tabresponse" data-toggle="tab">Response</a></li>
+						<li><a href="#tabpersist" data-toggle="tab">Persist</a></li>
+						<li><a href="#tablog" data-toggle="tab">Log</a></li>
+					</ul>
+
+
+					<div class="tab-content">
+						<div id="tabrequest" class="tab-pane fade in active">
+							<pre id="hdrequest"></pre>
+						</div>
+						<div id="tabresponse" class="tab-pane fade">
+							<pre id="hdresponse"></pre>
+						</div>
+						<div id="tabpersist" class="tab-pane fade">
+							<pre id="hdpersist"></pre>
+						</div>
+						<div id="tablog" class="tab-pane fade">
+							<pre id="hdlog"></pre>
+						</div>
 					</div>
 				</div>
-			</div>	
+			</div>
 		</div>
 	</div>
 
-
-
+	<div class="row">
+		<div class="col-md-12 col-lg-12 console">
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<h3 class="panel-title">Execution Logs</h3>
+				</div>
+				<div class="panel-body" id="divGroupLog" style="overflow:auto">
+					<ul class="list-group" id="groupLog"></ul>
+				</div>
+				<div class="panel-footer">
+					<label style="padding-top: 1%;">
+						<input type="checkbox" id="chkLogAutoScroll" checked="checked"> Auto scroll
+					</label>
+					<button type="button" class="btn btn-primary" tabindex="0" id="btnClearLog" style="float:right;">
+						<span class="glyphicon glyphicon-remove-sign"></span> Clear Log
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
 </body>
 </html>

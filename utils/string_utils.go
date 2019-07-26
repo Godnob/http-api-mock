@@ -29,7 +29,7 @@ func JoinJSON(inputs ...string) string {
 	result := gabs.New()
 	for _, input := range inputs {
 		jsonParsed, _ := gabs.ParseJSON([]byte(input))
-		children, _ := jsonParsed.S().ChildrenMap()
+		children := jsonParsed.S().ChildrenMap()
 
 		for key, child := range children {
 			value := child.Data()

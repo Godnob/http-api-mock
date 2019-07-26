@@ -8,9 +8,9 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/vtrifonov/http-api-mock/definition"
-	"github.com/vtrifonov/http-api-mock/logging"
-	"github.com/vtrifonov/http-api-mock/utils"
+	"github.com/Godnob/http-api-mock/definition"
+	"github.com/Godnob/http-api-mock/logging"
+	"github.com/Godnob/http-api-mock/utils"
 )
 
 //RequestCaller makes remote http requests

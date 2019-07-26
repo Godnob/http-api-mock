@@ -5,10 +5,10 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/vtrifonov/http-api-mock/definition"
-	"github.com/vtrifonov/http-api-mock/logging"
-	"github.com/vtrifonov/http-api-mock/persist"
-	"github.com/vtrifonov/http-api-mock/utils"
+	"github.com/Godnob/http-api-mock/definition"
+	"github.com/Godnob/http-api-mock/logging"
+	"github.com/Godnob/http-api-mock/persist"
+	"github.com/Godnob/http-api-mock/utils"
 )
 
 type PersistVarsFiller struct {

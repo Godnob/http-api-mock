@@ -5,9 +5,9 @@ import (
 	"html/template"
 	"net/http"
 
+	"github.com/Godnob/http-api-mock/definition"
+	"github.com/Godnob/http-api-mock/logging"
 	"github.com/elazarl/go-bindata-assetfs"
-	"github.com/vtrifonov/http-api-mock/definition"
-	"github.com/vtrifonov/http-api-mock/logging"
 	"golang.org/x/net/websocket"
 )
 

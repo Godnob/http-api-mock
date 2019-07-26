@@ -7,8 +7,8 @@ import (
 
 	"strings"
 
+	"github.com/Godnob/http-api-mock/definition"
 	"github.com/Jeffail/gabs"
-	"github.com/vtrifonov/http-api-mock/definition"
 )
 
 //ErrorPropertyMissingInJSON when there's no such property in the JSON document
